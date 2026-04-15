@@ -2,7 +2,7 @@ spring:
   application:
     name: expense-tracker
   datasource:
-    url: jdbc:mysql://localhost:3306/
+    url: jdbc:mysql://localhost:3306/expenseTracker
     username: root
     password: .kcrohit123
 
@@ -12,3 +12,9 @@ spring:
 
 server:
   port: 9090
+  servlet:
+    context-path: /api/v1
+
+
+jwtSecreteString: V7r9!xP2s#LqZ8@MjUe6^TfCwY4bHnKd
+EXPIRATION_TIME: 604800000
