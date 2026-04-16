@@ -59,4 +59,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.LOCKED);
     }
 
+    @ExceptionHandler(NotAuthenticatedException.class)
+    public ResponseEntity<Response<?>> handleNotAuthenticatedException(Exception ex){
+        Response<?> response = Response.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
 }
