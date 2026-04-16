@@ -39,4 +39,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(InvalidCredentialException.class)
+    public ResponseEntity<Response<?>> handleInvalidCredentialException(Exception ex){
+        Response<?> response = Response.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccountLockedException.class)
+    public ResponseEntity<Response<?>> handleLockedException(Exception ex){
+        Response<?> response = Response.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.LOCKED);
+    }
+
 }

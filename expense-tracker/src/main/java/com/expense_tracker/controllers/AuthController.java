@@ -1,8 +1,6 @@
 package com.expense_tracker.controllers;
 
-import com.expense_tracker.dtos.RegistrationRequest;
-import com.expense_tracker.dtos.RegistrationResponse;
-import com.expense_tracker.dtos.Response;
+import com.expense_tracker.dtos.*;
 import com.expense_tracker.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,16 @@ public class AuthController {
                 response
         ));
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Response<LoginResponse>> login(@RequestBody LoginRequest request){
+        LoginResponse response = authService.login(request);
+        return ResponseEntity.ok().body(new Response<>(
+                true,
+                "Login successful",
+                response
+        ));
     }
 
 }
