@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
 
         User savedUser = userRepository.save(newUser);
 
-        return mapper.ToRegistrationResponse(savedUser);
+        return mapper.toRegistrationResponse(savedUser);
     }
 
     @Override
