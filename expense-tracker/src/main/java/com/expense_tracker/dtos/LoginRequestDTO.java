@@ -4,7 +4,7 @@ package com.expense_tracker.dtos;
 import lombok.Data;
 
 @Data
-public class LoginRequest {
+public class LoginRequestDTO {
 
     private String email;
 

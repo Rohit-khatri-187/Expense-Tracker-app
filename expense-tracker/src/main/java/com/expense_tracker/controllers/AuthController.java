@@ -18,9 +18,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Response<RegistrationResponse>> register(@Valid @RequestBody RegistrationRequest request){
+    public ResponseEntity<Response<RegistrationResponseDTO>> register(@Valid @RequestBody RegistrationRequestDTO request){
 
-        RegistrationResponse response = authService.register(request);
+        RegistrationResponseDTO response = authService.register(request);
 
         return ResponseEntity.ok().body(new Response<>(
                 true,
@@ -31,8 +31,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response<LoginResponse>> login(@RequestBody LoginRequest request){
-        LoginResponse response = authService.login(request);
+    public ResponseEntity<Response<LoginResponseDTO>> login(@RequestBody LoginRequestDTO request){
+        LoginResponseDTO response = authService.login(request);
         return ResponseEntity.ok().body(new Response<>(
                 true,
                 "Login successful",

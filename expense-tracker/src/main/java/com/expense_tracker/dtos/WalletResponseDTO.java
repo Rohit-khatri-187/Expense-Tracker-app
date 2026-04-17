@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WalletResponse {
+public class WalletResponseDTO {
 
     Long walletId;
     String walletName;

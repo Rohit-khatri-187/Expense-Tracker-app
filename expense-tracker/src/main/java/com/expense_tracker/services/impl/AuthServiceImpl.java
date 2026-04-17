@@ -1,15 +1,15 @@
 package com.expense_tracker.services.impl;
 
-import com.expense_tracker.dtos.LoginRequest;
-import com.expense_tracker.dtos.LoginResponse;
+import com.expense_tracker.dtos.LoginRequestDTO;
+import com.expense_tracker.dtos.LoginResponseDTO;
 import com.expense_tracker.entities.User;
 import com.expense_tracker.enums.UserRole;
 import com.expense_tracker.exceptions.AccountLockedException;
 import com.expense_tracker.exceptions.InvalidCredentialException;
 import com.expense_tracker.mapper.Mapper;
 import com.expense_tracker.repositories.UserRepository;
-import com.expense_tracker.dtos.RegistrationRequest;
-import com.expense_tracker.dtos.RegistrationResponse;
+import com.expense_tracker.dtos.RegistrationRequestDTO;
+import com.expense_tracker.dtos.RegistrationResponseDTO;
 import com.expense_tracker.security.CustomUserDetails;
 import com.expense_tracker.security.JwtUtils;
 import com.expense_tracker.services.AuthService;
@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
 
     @Override
-    public RegistrationResponse register(RegistrationRequest request) {
+    public RegistrationResponseDTO register(RegistrationRequestDTO request) {
 
         log.info("Inside the register service () ");
 
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponseDTO login(LoginRequestDTO request) {
 
         log.info("Inside the login service () : ");
 
@@ -82,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
 
             String token = jwtUtils.generateToken(user.getEmail());
 
-            return LoginResponse.builder()
+            return LoginResponseDTO.builder()
                     .token(token)
                     .role(user.getRole())
                     .build();

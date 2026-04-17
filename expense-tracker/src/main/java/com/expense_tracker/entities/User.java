@@ -24,7 +24,7 @@ public class User {
     private Long userId;
 
     @NotNull
-    @Size(min = 5 , max = 30 , message = "fullname should be between 5 and 30 characters")
+    @Size(min = 5 , max = 30 , message = "fullName should be between 5 and 30 characters")
     private String fullName;
 
     @Column(unique = true)

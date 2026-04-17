@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class WalletCreateUpdateRequest {
+public class WalletCreateUpdateRequestDTO {
 
     @Size(min = 3 , max = 20 , message = "Wallet name should be between 3-20 characters")
     private String walletName;

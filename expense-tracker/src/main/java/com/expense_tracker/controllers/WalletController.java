@@ -2,9 +2,8 @@ package com.expense_tracker.controllers;
 
 
 import com.expense_tracker.dtos.Response;
-import com.expense_tracker.dtos.WalletCreateUpdateRequest;
-import com.expense_tracker.dtos.WalletResponse;
-import com.expense_tracker.entities.Wallet;
+import com.expense_tracker.dtos.WalletCreateUpdateRequestDTO;
+import com.expense_tracker.dtos.WalletResponseDTO;
 import com.expense_tracker.services.WalletService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +20,8 @@ public class WalletController {
     private final WalletService walletService;
 
     @PostMapping("/add")
-    public ResponseEntity<Response<WalletResponse>> addWallet(@Valid @RequestBody WalletCreateUpdateRequest request){
-        WalletResponse savedWallet = walletService.addWallet(request);
+    public ResponseEntity<Response<WalletResponseDTO>> addWallet(@Valid @RequestBody WalletCreateUpdateRequestDTO request){
+        WalletResponseDTO savedWallet = walletService.addWallet(request);
 
         return ResponseEntity.ok().body(
                 new Response<>(
@@ -34,9 +33,9 @@ public class WalletController {
     }
 
     @PutMapping("/{walletId}")
-    public ResponseEntity<Response<WalletResponse>> updateWallet(@PathVariable Long walletId ,@RequestBody WalletCreateUpdateRequest request){
+    public ResponseEntity<Response<WalletResponseDTO>> updateWallet(@PathVariable Long walletId , @RequestBody WalletCreateUpdateRequestDTO request){
 
-        WalletResponse updatedWallet = walletService.updateWallet(walletId,request);
+        WalletResponseDTO updatedWallet = walletService.updateWallet(walletId,request);
 
         return ResponseEntity.ok().body(
                 new Response<>(
@@ -49,9 +48,9 @@ public class WalletController {
     }
 
     @DeleteMapping("/{walletId}")
-    public ResponseEntity<Response<WalletResponse>> deleteWallet(@PathVariable Long walletId ){
+    public ResponseEntity<Response<WalletResponseDTO>> deleteWallet(@PathVariable Long walletId ){
 
-        WalletResponse deletedWallet = walletService.deleteWallet(walletId);
+        WalletResponseDTO deletedWallet = walletService.deleteWallet(walletId);
 
         return ResponseEntity.ok().body(
                 new Response<>(
@@ -64,9 +63,9 @@ public class WalletController {
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<WalletResponse>>> getAllWallets(){
+    public ResponseEntity<Response<List<WalletResponseDTO>>> getAllWallets(){
 
-        List<WalletResponse> wallets = walletService.getAllWalletOfUser();
+        List<WalletResponseDTO> wallets = walletService.getAllWalletOfUser();
 
         return ResponseEntity.ok().body(
                 new Response<>(

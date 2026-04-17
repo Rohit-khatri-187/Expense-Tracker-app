@@ -1,7 +1,7 @@
 package com.expense_tracker.services.impl;
 
-import com.expense_tracker.dtos.WalletCreateUpdateRequest;
-import com.expense_tracker.dtos.WalletResponse;
+import com.expense_tracker.dtos.WalletCreateUpdateRequestDTO;
+import com.expense_tracker.dtos.WalletResponseDTO;
 import com.expense_tracker.entities.Wallet;
 import com.expense_tracker.exceptions.AlreadyExistException;
 import com.expense_tracker.exceptions.NotAuthenticatedException;
@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class WalletServiceImpl implements WalletService {
     private final Mapper mapper;
 
     @Override
-    public WalletResponse addWallet(WalletCreateUpdateRequest request) {
+    public WalletResponseDTO addWallet(WalletCreateUpdateRequestDTO request) {
 
         log.info("Inside the add wallet service : () ");
 
@@ -53,7 +52,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public WalletResponse updateWallet(Long walletId , WalletCreateUpdateRequest request) {
+    public WalletResponseDTO updateWallet(Long walletId , WalletCreateUpdateRequestDTO request) {
 
         log.info("Inside the update wallet service () : ");
 
@@ -74,7 +73,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public WalletResponse deleteWallet(Long walletId) {
+    public WalletResponseDTO deleteWallet(Long walletId) {
 
         log.info("Inside the delete wallet service () : ");
 
@@ -93,7 +92,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public List<WalletResponse> getAllWalletOfUser() {
+    public List<WalletResponseDTO> getAllWalletOfUser() {
         log.info("Inside the get All wallet of user service () : ");
 
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -105,7 +104,7 @@ public class WalletServiceImpl implements WalletService {
 
         List<Wallet> wallets =  walletRepository.getAllWalletOfUser(customUserDetails.getUserId());
 
-        List<WalletResponse> walletResponses = wallets.stream().map(mapper::toWalletResponse)
+        List<WalletResponseDTO> walletResponses = wallets.stream().map(mapper::toWalletResponse)
                 .toList();
 
         return walletResponses;
