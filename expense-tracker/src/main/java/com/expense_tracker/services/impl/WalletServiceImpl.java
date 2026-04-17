@@ -1,10 +1,12 @@
 package com.expense_tracker.services.impl;
 
-import com.expense_tracker.dtos.WalletCreateUpdateRequest;
+import com.expense_tracker.dtos.WalletCreateUpdateRequestDTO;
+import com.expense_tracker.dtos.WalletResponseDTO;
 import com.expense_tracker.entities.Wallet;
 import com.expense_tracker.exceptions.AlreadyExistException;
 import com.expense_tracker.exceptions.NotAuthenticatedException;
 import com.expense_tracker.exceptions.NotFoundException;
+import com.expense_tracker.mapper.Mapper;
 import com.expense_tracker.repositories.WalletRepository;
 import com.expense_tracker.security.CustomUserDetails;
 import com.expense_tracker.services.WalletService;
@@ -21,9 +23,10 @@ import java.util.List;
 public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository walletRepository;
+    private final Mapper mapper;
 
     @Override
-    public Wallet addWallet(WalletCreateUpdateRequest request) {
+    public WalletResponseDTO addWallet(WalletCreateUpdateRequestDTO request) {
 
         log.info("Inside the add wallet service : () ");
 
@@ -39,17 +42,17 @@ public class WalletServiceImpl implements WalletService {
             throw new AlreadyExistException("Wallet already exists");
         }
 
-
-
         Wallet wallet = new Wallet();
         wallet.setWalletName(request.getWalletName());
         wallet.setUser(customUserDetails.getUser());
 
-        return walletRepository.save(wallet);
+        Wallet saved = walletRepository.save(wallet);
+
+        return mapper.toWalletResponse(saved);
     }
 
     @Override
-    public Wallet updateWallet(Long walletId , WalletCreateUpdateRequest request) {
+    public WalletResponseDTO updateWallet(Long walletId , WalletCreateUpdateRequestDTO request) {
 
         log.info("Inside the update wallet service () : ");
 
@@ -64,11 +67,13 @@ public class WalletServiceImpl implements WalletService {
 
         wallet.setWalletName(request.getWalletName());
 
-        return walletRepository.save(wallet);
+        Wallet updatedWallet = walletRepository.save(wallet);
+
+        return mapper.toWalletResponse(updatedWallet);
     }
 
     @Override
-    public Wallet deleteWallet(Long walletId) {
+    public WalletResponseDTO deleteWallet(Long walletId) {
 
         log.info("Inside the delete wallet service () : ");
 
@@ -83,11 +88,11 @@ public class WalletServiceImpl implements WalletService {
 
         walletRepository.delete(wallet);
 
-        return wallet;
+        return mapper.toWalletResponse(wallet);
     }
 
     @Override
-    public List<Wallet> getAllWalletOfUser() {
+    public List<WalletResponseDTO> getAllWalletOfUser() {
         log.info("Inside the get All wallet of user service () : ");
 
         CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -97,7 +102,13 @@ public class WalletServiceImpl implements WalletService {
         }
 
 
-        return walletRepository.getAllWalletOfUser(customUserDetails.getUserId());
+        List<Wallet> wallets =  walletRepository.getAllWalletOfUser(customUserDetails.getUserId());
+
+        List<WalletResponseDTO> walletResponses = wallets.stream().map(mapper::toWalletResponse)
+                .toList();
+
+        return walletResponses;
+
     }
 
 

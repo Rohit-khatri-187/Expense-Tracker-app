@@ -1,18 +1,18 @@
 package com.expense_tracker.services;
 
-import com.expense_tracker.dtos.WalletCreateUpdateRequest;
-import com.expense_tracker.entities.Wallet;
+import com.expense_tracker.dtos.WalletCreateUpdateRequestDTO;
+import com.expense_tracker.dtos.WalletResponseDTO;
 
 import java.util.List;
 
 public interface WalletService {
 
-    public Wallet addWallet(WalletCreateUpdateRequest request);
+    public WalletResponseDTO addWallet(WalletCreateUpdateRequestDTO request);
 
-    public Wallet updateWallet(Long walletId , WalletCreateUpdateRequest request);
+    public WalletResponseDTO updateWallet(Long walletId , WalletCreateUpdateRequestDTO request);
 
-    public Wallet deleteWallet(Long walletId);
+    public WalletResponseDTO deleteWallet(Long walletId);
 
-    public List<Wallet> getAllWalletOfUser();
+    public List<WalletResponseDTO> getAllWalletOfUser();
 
 }

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class RegistrationRequest {
+public class RegistrationRequestDTO {
 
     private String fullName;
     private String email;
