@@ -3,6 +3,7 @@ package com.expense_tracker.services.impl;
 import com.expense_tracker.config.CurrentUser;
 import com.expense_tracker.dtos.ExpenseRequestDTO;
 import com.expense_tracker.dtos.ExpenseResponseDTO;
+import com.expense_tracker.dtos.PageResponse;
 import com.expense_tracker.entities.Expense;
 import com.expense_tracker.entities.User;
 import com.expense_tracker.entities.Wallet;
@@ -11,11 +12,16 @@ import com.expense_tracker.exceptions.NotFoundException;
 import com.expense_tracker.mapper.Mapper;
 import com.expense_tracker.repositories.ExpenseRepository;
 import com.expense_tracker.repositories.WalletRepository;
-import com.expense_tracker.security.CustomUserDetails;
 import com.expense_tracker.services.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Slf4j
@@ -33,8 +39,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         log.info("Inside the add Expense service () : ");
 
-        CustomUserDetails customUserDetails = currentUser.getCurrentUserData();
-        User user = customUserDetails.getUser();
+        User user = currentUser.getCurrentUserData();
 
         if(user == null){
             throw new NotAuthenticatedException("Please login");
@@ -59,8 +64,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     public ExpenseResponseDTO updateExpense(Long expenseId , ExpenseRequestDTO request) {
         log.info("Inside the updateExpense service () : ");
 
-        CustomUserDetails customUserDetails = currentUser.getCurrentUserData();
-        User user = customUserDetails.getUser();
+        User user = currentUser.getCurrentUserData();
 
         if(user == null){
             throw new NotAuthenticatedException("Please login");
@@ -87,18 +91,44 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         log.info("Inside the delete Expense service () : ");
 
-        CustomUserDetails customUserDetails = currentUser.getCurrentUserData();
-        User user = customUserDetails.getUser();
+        User user = currentUser.getCurrentUserData();
 
         if(user == null){
             throw new NotAuthenticatedException("Please login");
         }
 
-        Expense expense = expenseRepository.findByExpenseIdAndUserId(expenseId,customUserDetails.getUserId())
+        Expense expense = expenseRepository.findByExpenseIdAndUserId(expenseId,user.getUserId())
                 .orElseThrow(() -> new NotFoundException("Expense not found") );
 
         expenseRepository.delete(expense);
 
         return mapper.toExpenseResponseDTO(expense);
+    }
+
+    @Override
+    public PageResponse<ExpenseResponseDTO> getExpenses(int page, int size, String sortBy) {
+
+        log.info("Inside the getAllExpenses : () ");
+
+        User user = currentUser.getCurrentUserData();
+
+        if(user == null){
+            throw new NotAuthenticatedException("Please login");
+        }
+
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sortBy).descending());
+
+        Page<Expense> expensePage = expenseRepository.getAllExpensesOfCurrentUser(user.getUserId(),pageable);
+
+        List<ExpenseResponseDTO> expenses = expensePage.stream().map(mapper::toExpenseResponseDTO).toList();
+
+        return new PageResponse<>(
+                expenses,
+                expensePage.getNumber(),
+                expensePage.getSize(),
+                expensePage.getTotalElements(),
+                expensePage.getTotalPages(),
+                expensePage.isLast()
+        );
     }
 }

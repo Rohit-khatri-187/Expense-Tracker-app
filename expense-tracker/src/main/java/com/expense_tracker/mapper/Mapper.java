@@ -1,9 +1,11 @@
 package com.expense_tracker.mapper;
 
 import com.expense_tracker.dtos.ExpenseResponseDTO;
+import com.expense_tracker.dtos.IncomeResponseDTO;
 import com.expense_tracker.dtos.RegistrationResponseDTO;
 import com.expense_tracker.dtos.WalletResponseDTO;
 import com.expense_tracker.entities.Expense;
+import com.expense_tracker.entities.Income;
 import com.expense_tracker.entities.User;
 import com.expense_tracker.entities.Wallet;
 import org.springframework.stereotype.Component;
@@ -41,6 +43,18 @@ public class Mapper {
                 .expenseDate(expense.getExpenseDate())
                 .createdAt(expense.getCreatedAt())
                 .updatedAt(expense.getUpdatedAt())
+                .build();
+    }
+
+    public IncomeResponseDTO toIncomeResponseDTO(Income income){
+        return IncomeResponseDTO.builder()
+                .incomeId(income.getIncomeId())
+                .incomeName(income.getIncomeName())
+                .amount(income.getAmount())
+                .walletName(income.getWallet().getWalletName())
+                .incomeDate(income.getIncomeDate())
+                .createdAt(income.getCreatedAt())
+                .updatedAt(income.getUpdatedAt())
                 .build();
     }
 
