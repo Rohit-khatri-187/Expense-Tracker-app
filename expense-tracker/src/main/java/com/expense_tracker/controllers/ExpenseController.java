@@ -2,6 +2,7 @@ package com.expense_tracker.controllers;
 
 import com.expense_tracker.dtos.ExpenseRequestDTO;
 import com.expense_tracker.dtos.ExpenseResponseDTO;
+import com.expense_tracker.dtos.PageResponse;
 import com.expense_tracker.dtos.Response;
 import com.expense_tracker.services.ExpenseService;
 import jakarta.validation.Valid;
@@ -56,6 +57,25 @@ public class ExpenseController {
                         true,
                         "expense deleted successfully",
                         deleteExpense
+                )
+        );
+
+    }
+
+    @GetMapping
+    public ResponseEntity<Response<PageResponse<ExpenseResponseDTO>>> getExpenses(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "expenseDate") String sortBy
+    ){
+
+        PageResponse<ExpenseResponseDTO> expenses = expenseService.getExpenses(page,size,sortBy);
+
+        return ResponseEntity.ok().body(
+                new Response<>(
+                        true,
+                        "Expenses retrieved",
+                        expenses
                 )
         );
 
