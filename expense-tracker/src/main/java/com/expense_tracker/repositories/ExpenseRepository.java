@@ -20,4 +20,8 @@ public interface ExpenseRepository extends JpaRepository<Expense,Long> {
     @Query("SELECT e FROM Expense e WHERE e.user.userId = :userId")
     Page<Expense> getAllExpensesOfCurrentUser(@Param("userId") Long userId, Pageable pageable);
 
+    @Query("SELECT e FROM Expense e WHERE e.user.userId = :userId")
+    List<Expense> getAllExpenses(@Param("userId") Long userId );
+
+
 }
