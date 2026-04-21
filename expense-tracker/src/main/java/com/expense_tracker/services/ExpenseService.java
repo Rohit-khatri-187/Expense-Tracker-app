@@ -4,6 +4,8 @@ import com.expense_tracker.dtos.ExpenseRequestDTO;
 import com.expense_tracker.dtos.ExpenseResponseDTO;
 import com.expense_tracker.dtos.PageResponse;
 
+import java.util.List;
+
 public interface ExpenseService {
 
     public ExpenseResponseDTO addExpense(ExpenseRequestDTO request);
@@ -13,5 +15,7 @@ public interface ExpenseService {
     public ExpenseResponseDTO deleteExpense(Long expenseId);
 
     public PageResponse<ExpenseResponseDTO> getExpenses(int page , int size , String sortBy);
+
+    public List<ExpenseResponseDTO> MonthlyExpenseData();
 
 }
