@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,5 +23,17 @@ public interface IncomeRepository extends JpaRepository<Income,Long> {
 
     @Query("SELECT i from Income i where i.user.userId =:userId")
     List<Income> getAllIncome(@Param("userId") Long userId);
+
+    @Query("""
+    SELECT i FROM Income i
+    WHERE i.user.userId = :userId
+    AND i.incomeDate BETWEEN :startDate AND :endDate
+    ORDER BY i.incomeDate DESC
+    """)
+    List<Income> findIncomeLast30Days(
+            @Param("userId") Long userId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
 
 }

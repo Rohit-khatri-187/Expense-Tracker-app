@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/incomes")
 @RequiredArgsConstructor
 @RestController
@@ -67,6 +69,21 @@ public class IncomeController {
     ){
 
         PageResponse<IncomeResponseDTO> incomes = incomeService.getIncomes(page,size,sortBy);
+
+        return ResponseEntity.ok().body(
+                new Response<>(
+                        true,
+                        "Income retrieved",
+                        incomes
+                )
+        );
+
+    }
+
+    @GetMapping("/monthly")
+    public ResponseEntity<Response<List<IncomeResponseDTO>>> getMonthlyIncomeData(){
+
+        List<IncomeResponseDTO> incomes = incomeService.MonthlyIncomeData();
 
         return ResponseEntity.ok().body(
                 new Response<>(

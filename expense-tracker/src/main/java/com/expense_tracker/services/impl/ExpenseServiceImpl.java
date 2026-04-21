@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -108,7 +109,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public PageResponse<ExpenseResponseDTO> getExpenses(int page, int size, String sortBy) {
 
-        log.info("Inside the getAllExpenses : () ");
+        log.info("Inside the getExpenses : () ");
 
         User user = currentUser.getCurrentUserData();
 
@@ -130,5 +131,25 @@ public class ExpenseServiceImpl implements ExpenseService {
                 expensePage.getTotalPages(),
                 expensePage.isLast()
         );
+    }
+
+    @Override
+    public List<ExpenseResponseDTO> MonthlyExpenseData() {
+        log.info("Inside the 30 days expenses : () ");
+
+        User user = currentUser.getCurrentUserData();
+
+        if(user == null){
+            throw new NotAuthenticatedException("Please login");
+        }
+
+        LocalDate today = LocalDate.now();
+
+        LocalDate startDate = today.minusDays(30);
+
+        List<Expense> expenses = expenseRepository.findExpenseLast30Days(user.getUserId(),startDate,today);
+
+        return expenses.stream()
+                .map(mapper::toExpenseResponseDTO).toList();
     }
 }

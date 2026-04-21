@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -128,5 +129,27 @@ public class IncomeServiceImpl implements IncomeService {
                 incomePage.getTotalPages(),
                 incomePage.isLast()
         );
+    }
+
+    @Override
+    public List<IncomeResponseDTO> MonthlyIncomeData() {
+
+        log.info("Inside the Monthly Income Data : ()");
+
+        User user = currentUser.getCurrentUserData();
+
+        if(user == null){
+            throw new NotAuthenticatedException("Please login");
+        }
+
+        LocalDate today = LocalDate.now();
+
+        LocalDate startDate = today.minusDays(30);
+
+        List<Income> incomes = incomeRepository.findIncomeLast30Days(user.getUserId(),startDate,today);
+
+
+        return incomes.stream()
+                .map(mapper::toIncomeResponseDTO).toList();
     }
 }
