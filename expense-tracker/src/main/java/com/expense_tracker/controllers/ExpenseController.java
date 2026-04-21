@@ -1,14 +1,13 @@
 package com.expense_tracker.controllers;
 
-import com.expense_tracker.dtos.ExpenseRequestDTO;
-import com.expense_tracker.dtos.ExpenseResponseDTO;
-import com.expense_tracker.dtos.PageResponse;
-import com.expense_tracker.dtos.Response;
+import com.expense_tracker.dtos.*;
 import com.expense_tracker.services.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/expenses")
 @RequiredArgsConstructor
@@ -79,6 +78,20 @@ public class ExpenseController {
                 )
         );
 
+    }
+
+    @GetMapping("/monthly")
+    public ResponseEntity<Response<List<ExpenseResponseDTO>>> getMonthlyExpenseData() {
+
+        List<ExpenseResponseDTO> expenses = expenseService.MonthlyExpenseData();
+
+        return ResponseEntity.ok().body(
+                new Response<>(
+                        true,
+                        "expenses retrieved",
+                        expenses
+                )
+        );
     }
 
 }
